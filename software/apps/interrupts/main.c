@@ -40,7 +40,7 @@ int main(void) {
   printf("Log initialized!\n");
 
   // Q5, Q6 - configure a GPIOTE Event to occur for a Button press
-
+  NVIC_EnableIRQ()
 
   // Q7, Q8 - initialize a software interrupt and set its priority
 
