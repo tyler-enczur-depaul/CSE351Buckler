@@ -27,6 +27,10 @@ int main(void) {
   NRF_LOG_DEFAULT_BACKENDS_INIT();
   printf("Log initialized!\n");
 
+  // Procedure to setup output
+
+  
+	
   // loop forever
   while (1) {
   }
