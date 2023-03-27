@@ -72,7 +72,7 @@ void virtual_timer_init(void) {
 // testing it over time.
 static uint32_t timer_start(uint32_t microseconds, virtual_timer_callback_t cb, bool repeated) {
 
-  // Return a unique timer ID. (hint: What is guaranteed unique about the timer you have created?)
+  
   return 0;
 }
 
