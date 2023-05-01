@@ -5,7 +5,7 @@ ifndef BOARD_MAKEFILE
 BOARD_MAKEFILE = 1
 
 # Board-specific configurations
-BOARD = Buckler_revB
+BOARD = Buckler_revC
 USE_BLE = 1
 
 # Get directory of this makefile
@@ -33,7 +33,9 @@ BOARD_VARS = \
 	DEBUG\
 	DEBUG_NRF\
 
-# Default SDK source files to be included
+# Default SDK source files to be included 
+#app_timer.c\
+
 BOARD_SOURCES += \
 	SEGGER_RTT.c\
 	SEGGER_RTT_Syscalls_GCC.c\
@@ -41,9 +43,8 @@ BOARD_SOURCES += \
 	app_error.c\
 	app_error_handler_gcc.c\
 	app_pwm.c\
-	app_scheduler.c\
-	app_timer.c\
 	app_uart.c\
+	app_scheduler.c\
 	app_util_platform.c\
 	before_startup.c\
 	ff.c\
@@ -90,17 +91,30 @@ BOARD_SOURCES += \
 	nrfx_uarte.c\
 	simple_logger.c\
 
+# BOARD_SOURCES += \
+# 	SEGGER_RTT.c \
+# 	SEGGER_RTT_Syscalls_GCC.c \
+# 	SEGGER_RTT_printf.c \
+# 	app_error.c \
+# 	app_error_handler_gcc.c \
+# 	app_pwm.c \
+# 	app_scheduler.c \ 
+# 	app_uart.c \
+
+
+
 ifneq ($(SOFTDEVICE_MODEL),blank)
 BOARD_SOURCES += \
+	nrf_sdh.c\
 	ble_advdata.c\
 	ble_advertising.c\
-	ble_conn_params.c\
 	ble_srv_common.c\
 	nrf_ble_gatt.c\
 	nrf_ble_qwr.c\
-	nrf_sdh.c\
 	nrf_sdh_ble.c\
 	simple_ble.c\
+# 	ble_conn_params.c\
+
 
 endif
 

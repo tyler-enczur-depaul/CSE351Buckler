@@ -49,15 +49,15 @@ int main(void) {
 
   // Don't forget to initialize your timer library
   virtual_timer_init();
-  nrf_delay_ms(3000);
+  nrf_delay_ms(30);
 
   // Setup some timers and see what happens
-  //virtual_timer_start_repeated(1000000, led0_toggle);
-  //virtual_timer_start_repeated(2000000, led1_toggle);
+  virtual_timer_start_repeated(1000000, &led0_toggle);
+  virtual_timer_start_repeated(2000000, &led1_toggle);
 
   // loop forever
   while (1) {
-    nrf_delay_ms(1000);
+    nrf_delay_ms(10);
   }
 }
 
