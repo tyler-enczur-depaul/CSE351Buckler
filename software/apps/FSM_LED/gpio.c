@@ -46,10 +46,9 @@ bool gpio_read(uint8_t gpio_num) {
     return val;
 }
 
-void gpio_OUT(uint8_t pin_numb, int val){
-    printf("Using OUT Register to write: %d on pin: %d \n", val, pin_numb); 
-    uint32_t address = 0x50000000 + 0x700 + 0x504; // loading OUT register
+void gpio_toggle(uint8_t pin_numb){    
+    uint32_t address = 0x50000000 +0x504; // loading OUT register
     uint32_t *ptr = (uint32_t *) address; 
-    printf("Address being written at is: %x \n", 0xFFFFFFFF||val<<pin_numb);
-    *ptr &=val<<pin_numb;  // Read the contents of the register and clear a necessary bit
+    
+    *ptr ^=val<<pin_numb;  // Read the contents of the register and clear a necessary bit
 }

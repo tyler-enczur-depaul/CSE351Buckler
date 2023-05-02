@@ -23,4 +23,4 @@ void gpio_clear(uint8_t gpio_num);
 //  current state of the specified gpio pin
 bool gpio_read(uint8_t gpio_num);
 
-void gpio_OUT(uint8_t pin_numb, int val);
+void gpio_toggle(uint8_t pin_numb);
