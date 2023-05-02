@@ -78,7 +78,7 @@ int main(void) {
     // delay before continuing
     // Note: removing this delay will make responses quicker, but will result
     //  in printf's in this loop breaking JTAG
-    nrf_delay_ms(500);
+    nrf_delay_ms(50);
     print_state();
 
     // iterate statechart

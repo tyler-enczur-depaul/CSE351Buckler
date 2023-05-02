@@ -1,4 +1,5 @@
-// Robot Template app
+
+// Robot Utilities app
 //
 // Framework for creating applications that control the Kobuki robot
 
@@ -25,10 +26,17 @@
 #include "kobukiSensorTypes.h"
 #include "kobukiUtilities.h"
 #include "lsm9ds1.h"
-#include "controller.h"
+#include "helper_funcs.h"
 
 // I2C manager
 NRF_TWI_MNGR_DEF(twi_mngr_instance, 5, 0);
+
+
+uint16_t previous_encoder = 0;
+float distance = 0;
+
+
+
 
 int main(void) {
   ret_code_t error_code = NRF_SUCCESS;
@@ -77,12 +85,22 @@ int main(void) {
   kobukiInit();
   printf("Kobuki initialized!\n");
 
-  robot_state_t state = OFF;
+  // configure initial state
+  states state = OFF;
+  KobukiSensors_t sensors = {0};
+
   // loop forever, running state machine
   while (1) {
+    // read sensors from robot
+    kobukiSensorPoll(&sensors);
+
+    // delay before continuing
+    // Note: removing this delay will make responses quicker, but will result
+    //  in printf's in this loop breaking JTAG
     nrf_delay_ms(1);
-    state = controller(state);
-  
-  }
+
+    printf("Encoders: %d - %d \n", sensors.leftWheelEncoder, sensors.rightWheelEncoder);
+    
 }
 
+}
