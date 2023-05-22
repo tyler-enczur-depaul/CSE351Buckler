@@ -63,12 +63,7 @@ void light_timer_callback() {
 simple_ble_app_t* simple_ble_app;
 
 void ble_evt_write(ble_evt_t const* p_ble_evt) {
-    if (simple_ble_is_char_event(p_ble_evt, &display_char)) {
-      printf("Got write to display characteristic!\n");
-      static char display_string[16];
-      memcpy(display_string, display_data, 16);
-      display_write(display_string, 0);
-      printf("%s\n", display_string);
+     // Implement the display action
     }
 
 
@@ -150,9 +145,9 @@ int main(void) {
 
   while(1) {
     if (sample_light) {
-      light_value = opt3004_read_result();
-      printf("Lux: %d\n", light_value);
-      simple_ble_notify_char(&light_char);
+       // first, read the sensor value
+       // need a simple_ble notify characteristic action here
+
       sample_light = false;
     }
     power_manage();
