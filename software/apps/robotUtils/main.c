@@ -103,6 +103,8 @@ int main(void) {
 
   float angle = 0.0f;
   
+  stop_kobuki();
+
   // loop forever, running state machine
   while (1) {
     // read sensors from robot
@@ -111,7 +113,7 @@ int main(void) {
     // delay before continuing
     // Note: removing this delay will make responses quicker, but will result
     //  in printf's in this loop breaking JTAG
-    nrf_delay_ms(50);
+    nrf_delay_ms(10);
 
     /// Testing the Point Rotation 
     ///////////////////////////////////////

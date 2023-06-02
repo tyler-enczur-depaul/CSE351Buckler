@@ -67,7 +67,7 @@ void ble_evt_write(ble_evt_t const* p_ble_evt) {
     }
 
 
-}
+
 
 int main(void) {
   ret_code_t error_code = NRF_SUCCESS;
