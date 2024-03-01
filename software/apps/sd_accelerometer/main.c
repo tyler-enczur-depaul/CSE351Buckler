@@ -37,35 +37,36 @@ void saadc_callback (nrfx_saadc_evt_t const * p_event) {
 
 
 int main (void) {
-
+//-------------------------------------------------------------//	 
+//----------------- MODIFY THE FOLLOWING CODE -----------------//
   ret_code_t error_code = NRF_SUCCESS;
 
   // // initialize RTT ENDS_INIT();
 
   // initialize analog to digital converter
-  nrfx_saadc_config_t saadc_config = NRFX_SAADC_DEFAULT_CONFIG;
-  saadc_config.resolution = NRF_SAADC_RESOLUTION_12BIT;
-  error_code = nrfx_saadc_init(&saadc_config, saadc_callback);
+  // ...
+ // ...
+ error_code = nrfx_saadc_init(&saadc_config, saadc_callback);
   APP_ERROR_CHECK(error_code);
 
   // // initialize analog inputs
   // // configure with 0 as input pin for now
-  nrf_saadc_channel_config_t channel_config = NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(0);
-  channel_config.gain = NRF_SAADC_GAIN1_6; // input gain of 1/6 Volts/Volt, multiply incoming signal by (1/6)
-  channel_config.reference = NRF_SAADC_REFERENCE_INTERNAL; // 0.6 Volt reference, input after gain can be 0 to 0.6 Volts
-
-  // // specify input pin and initialize that ADC channel
-  channel_config.pin_p = BUCKLER_ANALOG_ACCEL_X;
-  error_code = nrfx_saadc_channel_init(X_CHANNEL, &channel_config);
+   // ...
+   // ...
+  // // specify input pin for X axis and initialize that ADC channel
+   // ...
+  // ...
   APP_ERROR_CHECK(error_code);
 
-  // // specify input pin and initialize that ADC channel
-  channel_config.pin_p = BUCKLER_ANALOG_ACCEL_Y;
+  // // specify input pin for Y axis and initialize that ADC channel
+  // ...
+  
+
   error_code = nrfx_saadc_channel_init(Y_CHANNEL, &channel_config);
   APP_ERROR_CHECK(error_code);
 
-  // // specify input pin and initialize that ADC channel
-  channel_config.pin_p = BUCKLER_ANALOG_ACCEL_Z;
+  // // specify input pin for Z axis and initialize that ADC channel
+ // ...
   error_code = nrfx_saadc_channel_init(Z_CHANNEL, &channel_config);
   APP_ERROR_CHECK(error_code);
 
@@ -78,58 +79,36 @@ int main (void) {
 
   // calibration of the voltage output from the ADC
 
-  float LSB = 0.000879; // 3.6V/ 2^12 -- where 3.6V = 0.6/(1/6) 
-  float supplyV = 2.91;  // Volts
-  float vx = 0.0;
-  float vy = 0.0; 
-  float vz = 0.0;
+  // .. copy your work from the accelerometer lab
+
+  // variables for sampling raw values from the ADC
+	
+  // defining tilt variables
   
-  float ax, ay, az;
-
-  float mx = .42/3 * supplyV;
-  float my = .42/3 * supplyV;
-  float mz = .42/3 * supplyV;
-
-  float bx = 1.43;// from the observation//1.5/3 * supplyV;
-  float by = 1.45;// from the observation//1.5/3 * supplyV;
-  float bz = 1.48;// from the observation //1.5/3 * supplyV;
-
-
-  // tilt variables
-
-  float phi = 0.0; // angle about x-axis
-  float theta = 0.0;  // angle about z-axis
-  float psi = 0.0; // angle about y-axis
-
-
-   nrf_saadc_value_t x_val = sample_value(X_CHANNEL);
-    nrf_saadc_value_t y_val = sample_value(Y_CHANNEL);
-    nrf_saadc_value_t z_val = sample_value(Z_CHANNEL);
   
   // Initialize the SD Card for logging data in TESTFILE.csv
   init_SDCard();
 
   // loop forever
   while (1) {
+   
     // sample analog inputs
-   x_val = sample_value(X_CHANNEL);
-   y_val = sample_value(Y_CHANNEL);
-   z_val = sample_value(Z_CHANNEL);
 
-    vx = LSB*x_val;
-    vy = LSB*y_val;
-    vz = LSB*z_val;
+   // convert the ADC output to voltage values
+    
 
-	// Calculation of the acceleration from the calibrated voltage output of the accelerometer
-    ax = (vx - bx)/mx;
-    ay = (vy - by)/my;
-    az = (vz - bz)/mz;
-    // display results
+   // calculation of acceleration from voltage output
+    
+   
+   //-------------------------------------------------------------//	  
+   //---------- DONT MODIFY THE CODE BELOW THIS LINE -------------//
+// display results
      
     printf("a_x: %f\ta_y: %f\ta_z:%f\n", ax, ay, az);
-	    
+   
+    // code for logging data from the accelerometer    
       if (!gpio_read(BUCKLER_BUTTON0)) {
-       
+         
         timestamp = get_timestamp();      
         simple_logger_log("%f,%f,%f,%f\n", timestamp, ax, ay, az);
       
