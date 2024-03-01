@@ -23,8 +23,10 @@
 
 #include "buckler.h"
 
-void timer_init(){
+void timer_init(uint8_t duration){
 	// fill in this function to initialize a timer of your choice
+
+
 
 }
 
@@ -49,7 +51,8 @@ int main(void) {
   nrf_gpio_pin_dir_set(BUCKLER_LED1, NRF_GPIO_PIN_DIR_OUTPUT);
   nrf_gpio_pin_dir_set(BUCKLER_LED2, NRF_GPIO_PIN_DIR_OUTPUT);
 
-  timer_init();  
+  uint8_t duration = 3; // or a time of your choice. 
+  timer_init(duration);  
 
 
   nrf_delay_ms(3000);
@@ -58,9 +61,17 @@ int main(void) {
   // loop forever
   while (1) {
     printf("Timer 4 readings are: %d \n", read_timer());
-    
-    // for better readability on the terminal window, adding some delay is useful
-    nrf_delay_ms(1000);
+      
+
+    // placing a check for TASKS_COMPARE[0]. This will be HIGH as soon as the desired time is reached.
+    // Dont forget to set up the corresponding CC[0] for the value corresponding to duration . 
+    while(NRF_TIMER4->TASKS_COMPARE[0]){
+      printf("%d seconds reached. \n", duration);
+      // TASKS_COMPARE[0] needs to be cleared for allowing it to run again.
+      // for better readability on the terminal window, adding some delay is useful
+      nrf_delay_ms(500);
+    }
+
   }
 }
 
