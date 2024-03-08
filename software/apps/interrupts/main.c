@@ -43,6 +43,9 @@ int main(void) {
   // 2. enable interrupt
   // 3. enable IRQ on NVIC 
 
+  NVIC_EnableIRQ()
+
+
   // loop forever
   while (1) {
     printf("Looping\n");
