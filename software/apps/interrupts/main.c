@@ -24,6 +24,7 @@ void SWI1_EGU1_IRQHandler(void) {
     NRF_EGU1->EVENTS_TRIGGERED[0] = 0;
 }
 
+// Step B: Write an IRQ Handler/ISR for the Interrupt
 void GPIOTE_IRQHandler(void) {
     NRF_GPIOTE->EVENTS_IN[0] = 0;
 }
@@ -36,15 +37,12 @@ int main(void) {
   APP_ERROR_CHECK(error_code);
   NRF_LOG_DEFAULT_BACKENDS_INIT();
   printf("Log initialized!\n");
+ 
+// Step A: Configuration 
+  // 1. configure
+  // 2. enable interrupt
+  // 3. enable IRQ on NVIC 
 
-<<<<<<< HEAD
-  // Q5, Q6 - configure a GPIOTE Event to occur for a Button press
-  NVIC_EnableIRQ()
-
-  // Q7, Q8 - initialize a software interrupt and set its priority
-
-=======
->>>>>>> parent of 2bdbc6b... Readied the Interrupts lab for the Lab 6.
   // loop forever
   while (1) {
     printf("Looping\n");
