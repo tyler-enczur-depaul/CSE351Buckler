@@ -32,7 +32,7 @@ int main(void) {
   uint32_t i = 0;
   while (1) {
     nrf_delay_ms(1000);
-    printf("Iteration: %lu\n", i++);
+    printf("Address of variable i: %p\n",&i);
   }
 }
 

@@ -39,9 +39,15 @@ int main(void) {
     APP_ERROR_CHECK(error_code);
   }
 
+  int myNums[3] = {2,4,6}, x;
+
+  for (int x=0; x<3; x++) {
+    printf("[index %d] Address: %p\n, Value: %d\n",x, (myNums + x), *(myNums + x));
+  }
+
   // loop forever
   while (1) {
-    for (int i=0; i<3; i++) {
+    for (int i=2; i>-1; i--) {
       nrf_gpio_pin_toggle(LEDS[i]);
       nrf_delay_ms(500);
     }

@@ -47,20 +47,23 @@ int main(void) {
 
   // Initialize SD card
   const char filename[] = "testfile.log";
-  const char permissions[] = "a"; // w = write, a = append
+  const char permissions[] = "w"; // w = write, a = append
 
   // Start file
-  simple_logger_init(filename, permissions);
+  error_code  = simple_logger_init(filename, permissions);
+  APP_ERROR_CHECK(error_code);
 
   // If no header, add it
-  simple_logger_log_header("HEADER for file \'%s\', written on %s \n", filename, "DATE");
+  error_code  = simple_logger_log_header("HEADER for file \'%s\', written on %s \n", filename, "DATE");
+  APP_ERROR_CHECK(error_code);
   printf("Wrote header to SD card\n");
 
   // Write sample lines
   int nr_lines = 5;
 
   for (int i = 0; i < nr_lines; i++) {
-    simple_logger_log("%s: Line %i - Additional line added\n", "TIMESTAMP", i+1);
+    error_code  = simple_logger_log("%s: Line %i - Additional line added\n", "TIMESTAMP", i+1);
+    APP_ERROR_CHECK(error_code);
     printf("Wrote line to SD card\n");
   }
 
