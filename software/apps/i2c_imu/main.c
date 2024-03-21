@@ -47,12 +47,14 @@ int main(void) {
 
   lsm9ds1_start_gyro_integration();
 
+  printf("Testing IMU \n");
   // loop forever
   while (1) {
     // get measurements
     lsm9ds1_measurement_t acc_measurement = lsm9ds1_read_accelerometer();
     lsm9ds1_measurement_t gyr_measurement = lsm9ds1_read_gyro_integration();
     lsm9ds1_measurement_t mag_measurement = lsm9ds1_read_magnetometer();
+
 
     // print results
     printf("                      X-Axis\t    Y-Axis\t    Z-Axis\n");
