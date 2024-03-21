@@ -3,7 +3,7 @@ name: Modified Application Trigger
 on:
   push:
     paths:
-      - 'CSE351Buckler/software/apps/**'
+      - 'software/apps/**'
 jobs:
   build:
     name: Run Make in Changed Folders
@@ -15,13 +15,13 @@ jobs:
       - name: List Changed Folders
         run: |
           echo "Changed Folders:"
-          git diff --name-only ${{github.even.before}} ${{github.sha}} | grep '^CSE351Buckler/software/apps/' | cut -d/ -f5 | uniq > changed_folders.txt || true
+          git diff --name-only ${{github.even.before}} ${{github.sha}} | grep '^software/apps/' | cut -d/ -f5 | uniq > changed_folders.txt || true
           cat changed_folders.txt
-          find CSE351Buckler/software/apps -mindpeth 1 -maxdepth 1 -type d -printf "%f\n"
+          
       - name: Run Make in Changed Folders
         run: |
           while IFS=read -r folder; do
-            do "CSE351Buckler/software/apps/$folder" || exit
+            do "software/apps/$folder" || exit
             make
             cd - 
           done < changed_folders.txt
