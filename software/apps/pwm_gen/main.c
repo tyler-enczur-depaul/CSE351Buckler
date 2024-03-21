@@ -5,7 +5,7 @@
 #include "app_error.h"
 #include "bsp.h"
 #include "nrf_delay.h"
-#include "app_pwm.h"\
+#include "app_pwm.h"
 
 // Create the instance "PWM1" using TIMER1.
 
