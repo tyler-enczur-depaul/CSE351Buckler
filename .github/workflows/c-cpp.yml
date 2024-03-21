@@ -1,4 +1,4 @@
-name: New Application Trigger
+name: Modified Application Trigger
 
 on:
   push:
@@ -6,14 +6,22 @@ on:
       - 'CSE351Buckler/software/apps/**'
 jobs:
   build:
-    name: Check for new Folder
+    name: Run Make in Changed Folders
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
     
-      - name: List New Folders
+      - name: List Changed Folders
         run: |
-          echo "New Folders:"
+          echo "Changed Folders:"
+          git diff --name-only ${{github.even.before}} ${{github.sha}} | grep '^CSE351Buckler/software/apps/' | cut -d/ -f5 | uniq > changed_folders.txt || true
+          cat changed_folders.txt
           find CSE351Buckler/software/apps -mindpeth 1 -maxdepth 1 -type d -printf "%f\n"
-    
+      - name: Run Make in Changed Folders
+        run: |
+          while IFS=read -r folder; do
+            do "CSE351Buckler/software/apps/$folder" || exit
+            make
+            cd - 
+          done < changed_folders.txt
