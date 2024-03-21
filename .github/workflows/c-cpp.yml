@@ -20,7 +20,7 @@ jobs:
           
       - name: Run Make in Changed Folders
         run: |
-          while IFS=read -r folder || [ -n "$folder" ]; do
+          while IFS=read folder || [ -n "$folder" ]; do
             cd "software/apps/$folder" || exit
             make
             cd - 
