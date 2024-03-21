@@ -1,0 +1,19 @@
+name: New Application Trigger
+
+on:
+  push:
+    paths:
+      - 'CSE351Buckler/software/apps/**'
+jobs:
+  build:
+    name: Check for new Folder
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+    
+      - name: List New Folders
+        run: |
+          echo "New Folders:"
+          find CSE351Buckler/software/apps -mindpeth 1 -maxdepth 1 -type d -printf "%f\n"
+    
