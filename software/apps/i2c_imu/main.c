@@ -64,7 +64,7 @@ int main(void) {
     printf("Magnetism   (uT): %10.3f\t%10.3f\t%10.3f\n", mag_measurement.x_axis, mag_measurement.y_axis, mag_measurement.z_axis);
     printf("\n");
 
-    nrf_delay_ms(100);
+    nrf_delay_ms(300);
   }
 }
 
