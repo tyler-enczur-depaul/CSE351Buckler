@@ -116,7 +116,7 @@ int main (void) {
 	                
   
     
-    nrf_delay_ms(1000);
+    nrf_delay_ms(500);
       
   }   
 }
