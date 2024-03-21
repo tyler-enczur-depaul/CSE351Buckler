@@ -24,4 +24,4 @@ jobs:
             cd "software/apps/$folder" || exit
             make
             cd - 
-          done < changed_folders.txt
+          done < changed_folders.txt || true
