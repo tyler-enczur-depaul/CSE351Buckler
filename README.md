@@ -116,7 +116,7 @@ You want the "J-Link Software and Documentation Pack". There are various package
 available depending on operating system.
  
  
-**arm-none-eabi-gcc** is the cross-compiler version of GCC for building embedded ARM code.
+**arm-none-eabi-gcc** is the cross-compiler version of GCC for building embedded ARM code. You can download the compiler from [here](https://developer.arm.com/downloads/-/gnu-rm).
 
   MacOS:
   ```
