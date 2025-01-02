@@ -109,9 +109,17 @@ submodule in your own repository. An example of how to do so can be found in:
 
 ### Software Requirements
 
-In order to get code compiling and loading over JTAG, you'll need at least two tools.
-**MinGW** should be installed from [here](https://www.mingw-w64.org/). Download and install the installer `MSYS2` from the page linked [here](https://www.msys2.org/), and correctly add the path to `bin` subdirectory in your system environment variables.
-**JLinkExe** should be installed from [here](https://www.segger.com/downloads/jlink).
+
+
+1. **Make** is a software for carrying out detailed compilation tasks while saving the programmer from keeping track of all the included files and flags.
+
+Windows:
+
+Download and install GNU Make from [here](https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-bin.zip/download?use_mirror=gigenet&download=) and then additionally download `make` from [here](https://sourceforge.net/projects/gnuwin32/files/make/). Once installed, correctly provide the path to `bin` subdirectory (make sure that it contains `make`) to environment variables. Confirm that `make` is installed by typing it in Command Prompt. 
+
+Instructions for MacOS and Ubuntu are more straightforward. Feel free to ChatGPT. 
+
+4. **JLinkExe** should be installed from [here](https://www.segger.com/downloads/jlink).
 You want the "J-Link Software and Documentation Pack". There are various packages
 available depending on operating system.
 **arm-none-eabi-gcc** is the cross-compiler version of GCC for building embedded ARM code. You can download the compiler from [here](https://developer.arm.com/downloads/-/gnu-rm).
