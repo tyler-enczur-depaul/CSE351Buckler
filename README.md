@@ -112,7 +112,7 @@ submodule in your own repository. An example of how to do so can be found in:
 In order to get code compiling and loading over JTAG, you'll need at least two tools.
 
 **JLinkExe** should be installed from [here](https://www.segger.com/downloads/jlink).
-You want to the "J-Link Software and Documentation Pack". There are various packages
+You want the "J-Link Software and Documentation Pack". There are various packages
 available depending on operating system.
  
  
