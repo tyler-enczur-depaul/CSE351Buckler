@@ -110,12 +110,10 @@ submodule in your own repository. An example of how to do so can be found in:
 ### Software Requirements
 
 In order to get code compiling and loading over JTAG, you'll need at least two tools.
-
+**MinGW** should be installed from [here](https://www.mingw-w64.org/). Download and install the installer `MSYS2` from the page linked [here](https://www.msys2.org/), and correctly add the path to `bin` subdirectory in your system environment variables.
 **JLinkExe** should be installed from [here](https://www.segger.com/downloads/jlink).
 You want the "J-Link Software and Documentation Pack". There are various packages
 available depending on operating system.
- 
- 
 **arm-none-eabi-gcc** is the cross-compiler version of GCC for building embedded ARM code. You can download the compiler from [here](https://developer.arm.com/downloads/-/gnu-rm).
 
   MacOS:
@@ -127,3 +125,4 @@ available depending on operating system.
   ```
   $ sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa && sudo apt update && sudo apt install gcc-arm-embedded
   ```
+Correctly add path to `` subdirectory into your system's environment variables.
