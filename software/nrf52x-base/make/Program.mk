@@ -119,29 +119,46 @@ erase: $(BUILDDIR)
 
 .PHONY: gdb
 gdb:
+	@echo "Starting GDB server and debugging session..."
 ifeq ($(UNAME_S),Darwin)
-	$(Q)$(TERMINAL) "cd $(PWD) && $(JLINK_GDBSERVER) $(JLINK_FLAGS) $(JLINK_GDBSERVER_FLAGS)"'
+	@echo "Running on macOS..."
+	@echo "Launching JLink GDB Server with flags: $(JLINK_FLAGS) $(JLINK_GDBSERVER_FLAGS)"
+	$(Q)$(TERMINAL) "cd $(PWD) && $(JLINK_GDBSERVER) $(JLINK_FLAGS) $(JLINK_GDBSERVER_FLAGS)" &
+	@echo "Waiting for GDB server to initialize..."
 	$(Q)sleep 1
+	@echo "Creating .gdbinit file with initial GDB commands..."
 	$(Q)printf "target remote localhost:$(GDB_PORT_NUMBER)\nload\nmon reset\nbreak main\ncontinue\n" > .gdbinit
 ifneq ("$(wildcard $(DEBUG_ELF))","")
-	$(Q)$(TERMINAL) "cd $(PWD) && $(GDB) -x .gdbinit $(DEBUG_ELF)"'
+	@echo "Found DEBUG_ELF file: $(DEBUG_ELF). Launching GDB..."
+	$(Q)$(TERMINAL) "cd $(PWD) && $(GDB) -x .gdbinit $(DEBUG_ELF)" &
 else ifneq ("$(wildcard $(ELF))","")
-	$(Q)$(TERMINAL) "cd $(PWD) && $(GDB) -x .gdbinit $(ELF)"'
+	@echo "Found ELF file: $(ELF). Launching GDB..."
+	$(Q)$(TERMINAL) "cd $(PWD) && $(GDB) -x .gdbinit $(ELF)" &
 else
-	$(Q)$(TERMINAL) "cd $(PWD) && $(GDB) -x .gdbinit"'
+	@echo "No ELF files found. Launching GDB without ELF..."
+	$(Q)$(TERMINAL) "cd $(PWD) && $(GDB) -x .gdbinit" &
 endif
 else
-	$(Q)$(TERMINAL) -e "$(JLINK_GDBSERVER) $(JLINK_FLAGS) $(JLINK_GDBSERVER_FLAGS)"
+	@echo "Running on non-macOS system..."
+	@echo "Launching JLink GDB Server with flags: $(JLINK_FLAGS) $(JLINK_GDBSERVER_FLAGS)"
+	$(Q)$(TERMINAL) -e "$(JLINK_GDBSERVER) $(JLINK_FLAGS) $(JLINK_GDBSERVER_FLAGS)" &
+	@echo "Waiting for GDB server to initialize..."
 	$(Q)sleep 1
+	@echo "Creating .gdbinit file with initial GDB commands..."
 	$(Q)printf "target remote localhost:$(GDB_PORT_NUMBER)\nload\nmon reset\nbreak main\ncontinue\n" > .gdbinit
 ifneq ("$(wildcard $(DEBUG_ELF))","")
-	$(Q)$(TERMINAL) -e "$(GDB) -x .gdbinit $(DEBUG_ELF)"
+	@echo "Found DEBUG_ELF file: $(DEBUG_ELF). Launching GDB..."
+	$(Q)$(TERMINAL) -e "$(GDB) -x .gdbinit $(DEBUG_ELF)" &
 else ifneq ("$(wildcard $(ELF))","")
-	$(Q)$(TERMINAL) -e "$(GDB) -x .gdbinit $(ELF)"
+	@echo "Found ELF file: $(ELF). Launching GDB..."
+	$(Q)$(TERMINAL) -e "$(GDB) -x .gdbinit $(ELF)" &
 else
-	$(Q)$(TERMINAL) -e "$(GDB) -x .gdbinit"
+	@echo "No ELF files found. Launching GDB without ELF..."
+	$(Q)$(TERMINAL) -e "$(GDB) -x .gdbinit" &
 endif
 endif
+	@echo "GDB session started. Check for terminal output."
+
 
 .PHONY: rtt
 rtt:
