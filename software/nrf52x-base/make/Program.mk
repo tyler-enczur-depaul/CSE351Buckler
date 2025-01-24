@@ -159,18 +159,28 @@ endif
 endif
 	@echo "GDB session started. Check for terminal output."
 
-
 .PHONY: rtt
 rtt:
+	@echo "Starting RTT session..."
 ifeq ($(UNAME_S),Darwin)
-	$(Q)$(TERMINAL) "$(JLINK) $(JLINK_FLAGS) -AutoConnect 1"'
+	@echo "Running on macOS..."
+	@echo "Launching JLink with flags: $(JLINK_FLAGS) and AutoConnect enabled..."
+	$(Q)$(TERMINAL) "$(JLINK) $(JLINK_FLAGS) -AutoConnect 1" &
+	@echo "Waiting for JLink to initialize..."
 	$(Q)sleep 1
-	$(Q)$(TERMINAL) "$(JLINK_RTTCLIENT)"'
+	@echo "Launching JLink RTT Client..."
+	$(Q)$(TERMINAL) "$(JLINK_RTTCLIENT)"
 else
-	$(Q)$(TERMINAL) -e "$(JLINK) $(JLINK_FLAGS) -AutoConnect 1"
+	@echo "Running on non-macOS system..."
+	@echo "Launching JLink with flags: $(JLINK_FLAGS) and AutoConnect enabled..."
+	$(Q)$(TERMINAL) -e "$(JLINK) $(JLINK_FLAGS) -AutoConnect 1" &
+	@echo "Waiting for JLink to initialize..."
 	$(Q)sleep 1
+	@echo "Launching JLink RTT Client..."
 	$(Q)$(TERMINAL) -e "$(JLINK_RTTCLIENT)"
 endif
+	@echo "RTT session started. Check the RTT client output for logs."
+
 
 # ---- nrfutil bootloader rules
 .PHONY: pkg
