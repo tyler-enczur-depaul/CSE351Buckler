@@ -75,17 +75,6 @@ int main (void) {
 
   // initialization complete
   printf("Buckler initialized!\n");
-	
-  float x_vol = 0.0;
-  float y_vol = 0.0;
-  float z_vol = 0.0;
-  float lsb = 0.00088;
- 
-  float sensVal = 0.546;
-  float accelX = 0.0;
-  float accelY = 0.0;
-  float accelZ = 0.0;
-  float bias = 1.446;
 
   // loop forever
   while (1) {
@@ -94,20 +83,9 @@ int main (void) {
     nrf_saadc_value_t y_val = sample_value(Y_CHANNEL);
     nrf_saadc_value_t z_val = sample_value(Z_CHANNEL);
 
-     z_vol = z_val * lsb;
-     x_vol = x_val * lsb;
-     y_vol = y_val * lsb;
-
-     accelX = (x_vol - (bias+0.1)) / sensVal;
-     accelY = (y_vol - bias) / sensVal;
-     accelZ = (z_vol - (bias+0.5)) / sensVal;
-
     // display results
     printf("x: %d\ty: %d\tz:%d\n", x_val, y_val, z_val);
-    printf("x vol: %.5f\ty vol: %.5f\tz vol:%.5f\n", x_vol, y_vol, z_vol);
-    printf("x accel: %.5f\ty accel: %.5f\tz accel:%.5f\n", accelX, accelY, accelZ);
     nrf_delay_ms(250);
   }
 }
-
 
