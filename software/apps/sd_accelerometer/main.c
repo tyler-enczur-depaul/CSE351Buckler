@@ -1,7 +1,7 @@
 // Analog accelerometer app
 //
 // Reads data from the ADXL327 analog accelerometer
-
+// Checking the local preservation of changes
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
