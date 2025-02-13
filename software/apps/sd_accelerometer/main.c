@@ -103,7 +103,9 @@ int main (void) {
    //-------------------------------------------------------------//	  
    //---------- DONT MODIFY THE CODE BELOW THIS LINE -------------//
 // display results
-     
+    float ax=0;
+float ay = 0; 
+float az=0;     
     printf("a_x: %f\ta_y: %f\ta_z:%f\n", ax, ay, az);
    
     // code for logging data from the accelerometer    
