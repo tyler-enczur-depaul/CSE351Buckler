@@ -62,15 +62,5 @@ int main(void) {
   while (1) {
     printf("Timer 4 readings are: %d \n", read_timer());
       
-
-    // placing a check for EVENTS_COMPARE[0]. This will be HIGH as soon as the desired time is reached.
-    // Dont forget to set up the corresponding CC[0] for the value corresponding to duration . 
-    while(NRF_TIMER4->EVENTS_COMPARE[0]){
-      printf("%d seconds reached. \n", duration);
-      // EVENTS_COMPARE[0] needs to be cleared for allowing it to run again.
-      // for better readability on the terminal window, adding some delay is useful
-      nrf_delay_ms(500);
-    }
-
   }
 }
