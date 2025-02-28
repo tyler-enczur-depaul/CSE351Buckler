@@ -5,3 +5,4 @@ software/apps/gpio_blank/
 software/apps/blink/
 software/apps/interrupts/
 software/apps/printf/
+**/build
