@@ -14,16 +14,17 @@ typedef struct node_t {
 
     // *** Additional timer fields ***
 
-    // add your own variables here
-
+    // a virtual_timer_callback function pointer
+    virtual_timer_callback_t* cbFunc;
+    // variable to store the time period
+    uint32_t period;
+    // a variable to identify the node
+    uint8_t ID;
     // *** Do not edit below this line ***
 
     // timer value in microseconds. Used to sort the list. Must be initialized
     //  when the node is created
     uint32_t timer_value;
-
-  
-
     // pointer to next node in list. Do not change this field for a node or you
     //  will break the list
     struct node_t* next;
