@@ -1,0 +1,8 @@
+software/apps/analog_accelerometer/
+software/apps/sd_accelerometer/
+software/apps/sd_card/
+software/apps/gpio_blank/
+software/apps/blink/
+software/apps/interrupts/
+software/apps/printf/
+**/build
