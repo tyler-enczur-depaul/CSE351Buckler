@@ -143,6 +143,30 @@ else
 endif
 endif
 
+# ###########################################################################
+# ## included an additional target for opening JLinkExe for SSH operations
+# .PHONY: jlink
+# jlink:
+# 	$(JLINK) $(JLINK_FLAGS) -AutoConnect 1
+# ##########################################################################
+# .PHONY: rtt
+# rtt:
+# ifeq ($(UNAME_S),Darwin)
+# 	$(JLINK) $(JLINK_FLAGS) -AutoConnect 1 &
+# 	sleep 1
+# 	$(JLINK_RTTCLIENT)
+# else
+# ifdef DISPLAY
+# 	$(TERMINAL) -e "$(JLINK) $(JLINK_FLAGS) -AutoConnect 1" &
+# 	sleep 1
+# 	$(TERMINAL) -e "$(JLINK_RTTCLIENT)"
+# else
+# 	# No DISPLAY? Run in this terminal instead (SSH-safe)
+# 	# $(JLINK) $(JLINK_FLAGS) -AutoConnect 1 &
+# 	# sleep 1
+# 	$(JLINK_RTTCLIENT)
+# endif
+# endif
 .PHONY: rtt
 rtt:
 ifeq ($(UNAME_S),Darwin)
