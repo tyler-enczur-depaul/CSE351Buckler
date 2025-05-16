@@ -1,0 +1,22 @@
+/{
+    
+    leds {
+        compatible = "gpio-leds";
+
+        bucklerled0: gpio-pin25 {
+            gpios = <&gpio0 25 GPIO_ACTIVE_LOW>;
+            label = "Buckler LED 0";
+        };        
+    };
+};
+
+
+// bucklerled1: gpio-pin24 {
+//             gpios = <&gpio0 24 GPIO_ACTIVE_LOW>;
+//             label = "Buckler LED 1";
+//         };
+
+//         bucklerled2: gpio-pin23 {
+//             gpios = <&gpio0 23 GPIO_ACTIVE_LOW>;
+//             label = "Buckler LED 2";
+//         };
