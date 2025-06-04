@@ -63,7 +63,7 @@ void mpu9250_init(const nrf_twi_mngr_t* i2c) {
     .p_context          = NULL,
   };
   //ret_code_t error_code = nrf_drv_timer_init(&gyro_timer, &timer_cfg, gyro_timer_event_handler);
-  ret_code_t error_code = nrfx_timer_init(&gyro_timer, &timer_cfg, gyro_timer_event_handler);
+  ret_code_t error_code =  (&gyro_timer, &timer_cfg, gyro_timer_event_handler);
   APP_ERROR_CHECK(error_code);
 
   // reset mpu
