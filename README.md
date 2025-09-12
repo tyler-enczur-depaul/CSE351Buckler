@@ -21,8 +21,6 @@ A development board for teaching embedded systems.
 
  2. Build an example application
 
-**Note:** If prompted, the password is ``CSE351buckler``.
-
 ```
   $ cd software/apps/blink/
   $ make
@@ -139,3 +137,6 @@ available depending on operating system.
   $ sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa && sudo apt update && sudo apt install gcc-arm-embedded
   ```
 Correctly add path to `` subdirectory into your system's environment variables.
+
+
+**Note:** If prompted, the password is ``CSE351buckler``.
