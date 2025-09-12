@@ -21,6 +21,8 @@ A development board for teaching embedded systems.
 
  2. Build an example application
 
+**Note:** If prompted, the password is ``CSE351buckler``.
+
 ```
   $ cd software/apps/blink/
   $ make
