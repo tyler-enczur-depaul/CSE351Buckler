@@ -28,11 +28,9 @@ int main(void) {
   NRF_LOG_DEFAULT_BACKENDS_INIT();
   printf("Log initialized!\n");
 
-  // loop forever
-  uint32_t i = 0;
+  
   while (1) {
     nrf_delay_ms(1000);
-    printf("Address of variable i: %p\n",&i);
   }
 }
 
