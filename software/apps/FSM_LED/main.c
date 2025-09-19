@@ -67,11 +67,8 @@ int main(void) {
 
   // initialize LEDs
 
-  initialize_hardware();
-  
   // initialize the state variable
 
-  current_state = INIT; 
   
   // loop forever, running state machine
   while (1) {
@@ -79,7 +76,6 @@ int main(void) {
     // Note: removing this delay will make responses quicker, but will result
     //  in printf's in this loop breaking JTAG
     nrf_delay_ms(50);
-    print_state();
 
     // iterate statechart
     switch(current_state){
@@ -90,20 +86,11 @@ int main(void) {
         current_state = OFF;
         break;
       case ON:
-        gpio_clear(BUCKLER_LED0);
-        
-        if (gpio_read(BUCKLER_BUTTON0))
-          {current_state = OFF;            
-            
-          }
+        // what to do in ON state        
         break;
       case OFF:
-        gpio_set(BUCKLER_LED0);
-        
-        if (!gpio_read(BUCKLER_BUTTON0))
-          {current_state = ON;          
-          
-          }
+
+        // what to do in OFF state
         break;
       default:
         current_state = OFF;
