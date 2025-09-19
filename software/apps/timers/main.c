@@ -1,8 +1,7 @@
 
 
-//** Code: Hard Timers (Lab 6)
+//** Code: Hard Timers 
 //** Author: Umer Huzaifa
-//** Date: 12/30/2021
 //** Comments: Keeping a separate app for the hardware timers and counters
 
 
