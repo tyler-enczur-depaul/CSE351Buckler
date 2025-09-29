@@ -28,21 +28,35 @@ int main(void) {
     NRF_LOG_DEFAULT_BACKENDS_INIT();
     printf("Log initialized!\n");
 
-    gpio_direction_t dir = INPUT;
-    gpio_config(22, dir);
-    gpio_config(28, dir);
-
+    gpio_direction_t input = INPUT;
+    gpio_direction_t output = OUTPUT;
+    gpio_config(22, input);
+    gpio_config(28, input);
+    gpio_config(24, output);
+    gpio_config(25, output);
+    gpio_set(24);
+    gpio_set(25);
     bool switch_state = false;
     bool button_state = true;
     // loop forever
     while (1) {
         if (!!(gpio_manage->IN & (1 << 22)) != switch_state) {
             switch_state = !switch_state;
-            printf("SWITCH0 %s\n", switch_state ? "ON" : "OFF");
+            if (switch_state) {
+                gpio_clear(24);
+            }
+            else {
+                gpio_set(24);
+            }
         }
         if (!!(gpio_manage->IN & (1 << 28)) != button_state) {
+            if (button_state) {
+                gpio_clear(25);
+            }
+            else {
+                gpio_set(25);
+            }
             button_state = !button_state;
-            printf("BUTTON0 %s\n", button_state ? "OFF" : "ON");
         }
         nrf_delay_ms(10); // check every 10ms
     }
