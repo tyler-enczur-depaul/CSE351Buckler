@@ -49,7 +49,8 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
     TERMINAL ?= osascript -e 'tell application "Terminal" to do script
 else
-    TERMINAL ?= x-terminal-emulator
+    #TERMINAL ?= x-terminal-emulator
+    TERMINAL ?= wezterm start -- bash -c
 endif
 
 # ---- ID FLASH LOCATION

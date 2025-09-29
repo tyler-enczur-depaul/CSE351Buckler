@@ -8,10 +8,11 @@ gpio_manage_t* gpio_manage = (gpio_manage_t*)GPIO_ADDR;
 void gpio_config(uint8_t gpio_num, gpio_direction_t dir) {
     uint32_t* pins = gpio_manage->PIN_CNF;
     if (dir == INPUT) {
-        pins[gpio_num] = 0x2;
+        pins[gpio_num] = 0;
     }
     else {
-        pins[gpio_num] = 0x5;
+        printf("%p\n", pins+gpio_num);
+        pins[gpio_num] = 0b111;
     }
 }
 

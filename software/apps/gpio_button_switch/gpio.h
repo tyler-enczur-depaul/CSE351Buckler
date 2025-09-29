@@ -20,7 +20,7 @@ typedef struct {
     uint32_t DIRCLR;
     uint32_t LATCH;
     uint32_t DETECTMODE;
-    uint32_t RESERVED0[690];
+    uint32_t RESERVED0[118];
     uint32_t PIN_CNF[32]; 
 } gpio_manage_t;
 

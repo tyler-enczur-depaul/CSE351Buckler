@@ -1,0 +1,1 @@
+JLinkExe -device nrf52832_xxaa -if swd -speed 4000 -AutoConnect 1
