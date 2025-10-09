@@ -1,0 +1,215 @@
+BUILD OPTIONS:
+ Version     8e24
+ Chip        nrf52832
+ RAM         64 kB
+ FLASH       512 kB
+ SDK         15
+ SoftDevice  s132 6.1.1
+ Board       Buckler_revC
+
+SEGGER J-Link Commander V8.70 (Compiled Sep 17 2025 12:19:55)
+DLL version V8.70, compiled Sep 17 2025 12:18:50
+
+
+J-Link Command File read successfully.
+Processing script file...
+J-Link>r
+J-Link connection not established yet but required for command.
+Connecting to J-Link via USB...O.K.
+Firmware: J-Link OB-SAM3U128-V2-NordicSemi compiled Jul  8 2025 10:14:41
+Hardware version: V1.00
+J-Link uptime (since boot): 0d 00h 05m 22s
+S/N: 682113323
+License(s): RDI, FlashBP, FlashDL, JFlash, GDB
+USB speed mode: High speed (480 MBit/s)
+VTref=3.300V
+Target connection not established yet but required for command.
+Device "NRF52832_XXAA" selected.
+
+
+Connecting to target via SWD
+InitTarget() start
+InitTarget() end - Took 3.17ms
+Found SW-DP with ID 0x2BA01477
+DPIDR: 0x2BA01477
+CoreSight SoC-400 or earlier
+Scanning AP map to find all available APs
+AP[2]: Stopped AP scan as end of AP map has been reached
+AP[0]: AHB-AP (IDR: 0x24770011, ADDR: 0x00000000)
+AP[1]: JTAG-AP (IDR: 0x02880000, ADDR: 0x01000000)
+Iterating through AP map to find AHB-AP to use
+AP[0]: Core found
+AP[0]: AHB-AP ROM base: 0xE00FF000
+CPUID register: 0x410FC241. Implementer code: 0x41 (ARM)
+Found Cortex-M4 r0p1, Little endian.
+FPUnit: 6 code (BP) slots and 2 literal slots
+CoreSight components:
+ROMTbl[0] @ E00FF000
+[0][0]: E000E000 CID B105E00D PID 000BB00C SCS-M7
+[0][1]: E0001000 CID B105E00D PID 003BB002 DWT
+[0][2]: E0002000 CID B105E00D PID 002BB003 FPB
+[0][3]: E0000000 CID B105E00D PID 003BB001 ITM
+[0][4]: E0040000 CID B105900D PID 000BB9A1 TPIU
+[0][5]: E0041000 CID B105900D PID 000BB925 ETM
+Memory zones:
+  Zone: "Default" Description: Default access mode
+Cortex-M4 identified.
+Reset delay: 0 ms
+Reset type: NORMAL (https://wiki.segger.com/J-Link_Reset_Strategies)
+Reset: Halt core after reset via DEMCR.VC_CORERESET.
+Reset: Reset device via AIRCR.SYSRESETREQ.
+J-Link>savebin _build/downloaded_test.bin 0x3000 0x10
+Opening binary file for writing... [_build/downloaded_test.bin]
+Reading 16 bytes from addr 0x00003000 into file...O.K.
+J-Link>exit
+
+Script processing completed.
+
+Files _build/downloaded_test.bin and _build/softdevice_test.bin differ
+make[1]: Entering directory '/home/tylere/USB/Classwork/Y3Q1/CSE351/CSE351Buckler/software/apps/analog_accelerometer'
+BUILD OPTIONS:
+ Version     8e24
+ Chip        nrf52832
+ RAM         64 kB
+ FLASH       512 kB
+ SDK         15
+ SoftDevice  s132 6.1.1
+ Board       Buckler_revC
+
+SEGGER J-Link Commander V8.70 (Compiled Sep 17 2025 12:19:55)
+DLL version V8.70, compiled Sep 17 2025 12:18:50
+
+
+J-Link Command File read successfully.
+Processing script file...
+J-Link>w4 4001e504 1
+J-Link connection not established yet but required for command.
+Connecting to J-Link via USB...O.K.
+Firmware: J-Link OB-SAM3U128-V2-NordicSemi compiled Jul  8 2025 10:14:41
+Hardware version: V1.00
+J-Link uptime (since boot): 0d 00h 05m 23s
+S/N: 682113323
+License(s): RDI, FlashBP, FlashDL, JFlash, GDB
+USB speed mode: High speed (480 MBit/s)
+VTref=3.300V
+Target connection not established yet but required for command.
+Device "NRF52832_XXAA" selected.
+
+
+Connecting to target via SWD
+InitTarget() start
+InitTarget() end - Took 2.84ms
+Found SW-DP with ID 0x2BA01477
+DPIDR: 0x2BA01477
+CoreSight SoC-400 or earlier
+Scanning AP map to find all available APs
+AP[2]: Stopped AP scan as end of AP map has been reached
+AP[0]: AHB-AP (IDR: 0x24770011, ADDR: 0x00000000)
+AP[1]: JTAG-AP (IDR: 0x02880000, ADDR: 0x01000000)
+Iterating through AP map to find AHB-AP to use
+AP[0]: Core found
+AP[0]: AHB-AP ROM base: 0xE00FF000
+CPUID register: 0x410FC241. Implementer code: 0x41 (ARM)
+Found Cortex-M4 r0p1, Little endian.
+FPUnit: 6 code (BP) slots and 2 literal slots
+CoreSight components:
+ROMTbl[0] @ E00FF000
+[0][0]: E000E000 CID B105E00D PID 000BB00C SCS-M7
+[0][1]: E0001000 CID B105E00D PID 003BB002 DWT
+[0][2]: E0002000 CID B105E00D PID 002BB003 FPB
+[0][3]: E0000000 CID B105E00D PID 003BB001 ITM
+[0][4]: E0040000 CID B105900D PID 000BB9A1 TPIU
+[0][5]: E0041000 CID B105900D PID 000BB925 ETM
+Memory zones:
+  Zone: "Default" Description: Default access mode
+Cortex-M4 identified.
+Writing 00000001 -> 4001E504
+J-Link>loadfile ../../nrf52x-base
+'loadfile': Performing implicit reset & halt of MCU.
+Reset type: NORMAL (https://wiki.segger.com/J-Link_Reset_Strategies)
+Reset: Halt core after reset via DEMCR.VC_CORERESET.
+Reset: Reset device via AIRCR.SYSRESETREQ.
+Downloading file [../../nrf52x-base]...
+File is of unknown / unsupported format.
+J-Link>r
+Reset delay: 0 ms
+Reset type: NORMAL (https://wiki.segger.com/J-Link_Reset_Strategies)
+Reset: Halt core after reset via DEMCR.VC_CORERESET.
+Reset: Reset device via AIRCR.SYSRESETREQ.
+J-Link>g
+Memory map 'after startup completion point' is active
+J-Link>exit
+
+Script processing completed.
+
+make[1]: Leaving directory '/home/tylere/USB/Classwork/Y3Q1/CSE351/CSE351Buckler/software/apps/analog_accelerometer'
+SEGGER J-Link Commander V8.70 (Compiled Sep 17 2025 12:19:55)
+DLL version V8.70, compiled Sep 17 2025 12:18:50
+
+
+J-Link Command File read successfully.
+Processing script file...
+J-Link>r
+J-Link connection not established yet but required for command.
+Connecting to J-Link via USB...O.K.
+Firmware: J-Link OB-SAM3U128-V2-NordicSemi compiled Jul  8 2025 10:14:41
+Hardware version: V1.00
+J-Link uptime (since boot): 0d 00h 05m 23s
+S/N: 682113323
+License(s): RDI, FlashBP, FlashDL, JFlash, GDB
+USB speed mode: High speed (480 MBit/s)
+VTref=3.300V
+Target connection not established yet but required for command.
+Device "NRF52832_XXAA" selected.
+
+
+Connecting to target via SWD
+InitTarget() start
+InitTarget() end - Took 2.85ms
+Found SW-DP with ID 0x2BA01477
+DPIDR: 0x2BA01477
+CoreSight SoC-400 or earlier
+Scanning AP map to find all available APs
+AP[2]: Stopped AP scan as end of AP map has been reached
+AP[0]: AHB-AP (IDR: 0x24770011, ADDR: 0x00000000)
+AP[1]: JTAG-AP (IDR: 0x02880000, ADDR: 0x01000000)
+Iterating through AP map to find AHB-AP to use
+AP[0]: Core found
+AP[0]: AHB-AP ROM base: 0xE00FF000
+CPUID register: 0x410FC241. Implementer code: 0x41 (ARM)
+Found Cortex-M4 r0p1, Little endian.
+FPUnit: 6 code (BP) slots and 2 literal slots
+CoreSight components:
+ROMTbl[0] @ E00FF000
+[0][0]: E000E000 CID B105E00D PID 000BB00C SCS-M7
+[0][1]: E0001000 CID B105E00D PID 003BB002 DWT
+[0][2]: E0002000 CID B105E00D PID 002BB003 FPB
+[0][3]: E0000000 CID B105E00D PID 003BB001 ITM
+[0][4]: E0040000 CID B105900D PID 000BB9A1 TPIU
+[0][5]: E0041000 CID B105900D PID 000BB925 ETM
+Memory zones:
+  Zone: "Default" Description: Default access mode
+Cortex-M4 identified.
+Reset delay: 0 ms
+Reset type: NORMAL (https://wiki.segger.com/J-Link_Reset_Strategies)
+Reset: Halt core after reset via DEMCR.VC_CORERESET.
+Reset: Reset device via AIRCR.SYSRESETREQ.
+J-Link>loadfile _build/analog_accelerometer_sdk15_s132.hex
+'loadfile': Performing implicit reset & halt of MCU.
+Reset type: NORMAL (https://wiki.segger.com/J-Link_Reset_Strategies)
+Reset: Halt core after reset via DEMCR.VC_CORERESET.
+Reset: Reset device via AIRCR.SYSRESETREQ.
+Downloading file [_build/analog_accelerometer_sdk15_s132.hex]...
+J-Link: Flash download: Bank 0 @ 0x00000000: Skipped. Contents already match
+O.K.
+J-Link>r
+Reset delay: 0 ms
+Reset type: NORMAL (https://wiki.segger.com/J-Link_Reset_Strategies)
+Reset: Halt core after reset via DEMCR.VC_CORERESET.
+Reset: Reset device via AIRCR.SYSRESETREQ.
+J-Link>g
+Memory map 'after startup completion point' is active
+J-Link>exit
+
+Script processing completed.
+

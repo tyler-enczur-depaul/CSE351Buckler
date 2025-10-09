@@ -1,4 +1,4 @@
-software/apps/analog_accelerometer/
+#software/apps/analog_accelerometer/
 software/apps/sd_accelerometer/
 software/apps/sd_card/
 software/apps/gpio_blank/

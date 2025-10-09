@@ -25,65 +25,92 @@
 #define Y_CHANNEL 1
 #define Z_CHANNEL 2
 
+#define LSB 0.00087890625
+#define BIAS 1.65
+#define VOLTSPERG .462
+
+
 // callback for SAADC events
 void saadc_callback (nrfx_saadc_evt_t const * p_event) {
-  // don't care about adc callbacks
+    // don't care about adc callbacks
 }
 
 // sample a particular analog channel in blocking mode
 nrf_saadc_value_t sample_value (uint8_t channel) {
-  nrf_saadc_value_t val;
-  ret_code_t error_code = nrfx_saadc_sample_convert(channel, &val);
-  APP_ERROR_CHECK(error_code);
-  return val;
+    nrf_saadc_value_t val;
+    ret_code_t error_code = nrfx_saadc_sample_convert(channel, &val);
+    APP_ERROR_CHECK(error_code);
+    return val;
 }
 
 int main (void) {
-  ret_code_t error_code = NRF_SUCCESS;
+    ret_code_t error_code = NRF_SUCCESS;
 
-  // initialize RTT library
-  error_code = NRF_LOG_INIT(NULL);
-  APP_ERROR_CHECK(error_code);
-  NRF_LOG_DEFAULT_BACKENDS_INIT();
+    // initialize RTT library
+    error_code = NRF_LOG_INIT(NULL);
+    APP_ERROR_CHECK(error_code);
+    NRF_LOG_DEFAULT_BACKENDS_INIT();
 
-  // initialize analog to digital converter
-  nrfx_saadc_config_t saadc_config = NRFX_SAADC_DEFAULT_CONFIG;
-  saadc_config.resolution = NRF_SAADC_RESOLUTION_12BIT;
-  error_code = nrfx_saadc_init(&saadc_config, saadc_callback);
-  APP_ERROR_CHECK(error_code);
+    // initialize analog to digital converter
+    nrfx_saadc_config_t saadc_config = NRFX_SAADC_DEFAULT_CONFIG;
+    saadc_config.resolution = NRF_SAADC_RESOLUTION_12BIT;
+    error_code = nrfx_saadc_init(&saadc_config, saadc_callback);
+    APP_ERROR_CHECK(error_code);
 
-  // initialize analog inputs
-  // configure with 0 as input pin for now
-  nrf_saadc_channel_config_t channel_config = NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(0);
-  channel_config.gain = NRF_SAADC_GAIN1_6; // input gain of 1/6 Volts/Volt, multiply incoming signal by (1/6)
-  channel_config.reference = NRF_SAADC_REFERENCE_INTERNAL; // 0.6 Volt reference, input after gain can be 0 to 0.6 Volts
+    // initialize analog inputs
+    // configure with 0 as input pin for now
+    nrf_saadc_channel_config_t channel_config = NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(0);
+    channel_config.gain = NRF_SAADC_GAIN1_6; // input gain of 1/6 Volts/Volt, multiply incoming signal by (1/6)
+    channel_config.reference = NRF_SAADC_REFERENCE_INTERNAL; // 0.6 Volt reference, input after gain can be 0 to 0.6 Volts
 
-  // specify input pin and initialize that ADC channel
-  channel_config.pin_p = BUCKLER_ANALOG_ACCEL_X;
-  error_code = nrfx_saadc_channel_init(X_CHANNEL, &channel_config);
-  APP_ERROR_CHECK(error_code);
+    // specify input pin and initialize that ADC channel
 
-  // Use the code for configuring Accel_X channel to configure channels Accel_y and Accel_z
-  // Go through buckler.h for relevant macros for the two channels
+    // Use the code for configuring Accel_X channel to configure channels Accel_y and Accel_z
+    // Go through buckler.h for relevant macros for the two channels
+    channel_config.pin_p = BUCKLER_ANALOG_ACCEL_X;
+    error_code = nrfx_saadc_channel_init(X_CHANNEL, &channel_config);
+    APP_ERROR_CHECK(error_code);
 
-  
-  // initialization complete
-  printf("Buckler initialized!\n");
-	
+    channel_config.pin_p = BUCKLER_ANALOG_ACCEL_Y;
+    error_code = nrfx_saadc_channel_init(Y_CHANNEL, &channel_config);
+    APP_ERROR_CHECK(error_code);
 
-  // loop forever
-  while (1) {
-    // 1. Figure out how to sample a value from ADC making use of sample_value function
-    
-
-    // 2. print the values for x, y and z
+    channel_config.pin_p = BUCKLER_ANALOG_ACCEL_Z;
+    error_code = nrfx_saadc_channel_init(Z_CHANNEL, &channel_config);
+    APP_ERROR_CHECK(error_code);
 
 
-    // 3. Conver the ADC generated values to voltage and then the acceleration
-    
-    
-    nrf_delay_ms(250);
-  }
+
+    // initialization complete
+    printf("Buckler initialized!\n");
+
+
+    // loop forever
+    while (1) {
+        // 1. Figure out how to sample a value from ADC making use of sample_value function
+        // 2. print the values for x, y and z
+        // 3. Conver the ADC generated values to voltage and then the acceleration
+
+        nrf_saadc_value_t x_val = sample_value(X_CHANNEL);
+        nrf_saadc_value_t y_val = sample_value(Y_CHANNEL);
+        nrf_saadc_value_t z_val = sample_value(Z_CHANNEL);
+
+        float x_volt = (float)x_val * LSB;
+        float y_volt = (float)y_val * LSB;
+        float z_volt = (float)z_val * LSB;
+
+        float x_g = (x_volt - BIAS) / VOLTSPERG;
+        float y_g = (y_volt - BIAS) / VOLTSPERG;
+        float z_g = (z_volt - BIAS) / VOLTSPERG;
+
+
+        //printf("x_val: %hd\n y_val: %hd\n z_val: %hd\n", x_val, y_val, z_val);
+        //printf("x_volt: %fV\n y_volt: %fV\n z_volt: %fV\n", x_volt, y_volt, z_volt);
+        printf("x_g: %f\n y_g: %f\n z_g: %f\n", x_g, y_g, z_g);
+
+
+        nrf_delay_ms(250);
+    }
 }
 
 
