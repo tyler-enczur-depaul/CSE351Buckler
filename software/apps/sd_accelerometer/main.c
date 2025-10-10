@@ -1,0 +1,133 @@
+// Analog accelerometer app
+//
+// Reads data from the ADXL327 analog accelerometer
+
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <math.h>  // needed for tilt angle calculation
+
+
+#include "timestamp.h"
+
+#define RAD2DEG 57.13 
+
+// ADC channels
+#define X_CHANNEL 0
+#define Y_CHANNEL 1
+#define Z_CHANNEL 2
+
+
+float timestamp=0.0;
+
+
+
+// callback for SAADC events
+void saadc_callback (nrfx_saadc_evt_t const * p_event) {
+    // don't care about adc callbacks
+}
+
+// sample a particular analog channel in blocking mode
+nrf_saadc_value_t sample_value (uint8_t channel) {
+    nrf_saadc_value_t val;
+    ret_code_t error_code = nrfx_saadc_sample_convert(channel, &val);
+    APP_ERROR_CHECK(error_code);
+    return val;
+}
+
+
+int main (void) {
+    //-------------------------------------------------------------//	 
+    //----------------- MODIFY THE FOLLOWING CODE -----------------//
+    ret_code_t error_code = NRF_SUCCESS;
+
+    // initialize RTT library
+    error_code = NRF_LOG_INIT(NULL);
+    APP_ERROR_CHECK(error_code);
+    NRF_LOG_DEFAULT_BACKENDS_INIT();
+
+    // initialize analog to digital converter
+    nrfx_saadc_config_t saadc_config = NRFX_SAADC_DEFAULT_CONFIG;
+    saadc_config.resolution = NRF_SAADC_RESOLUTION_12BIT;
+    error_code = nrfx_saadc_init(&saadc_config, saadc_callback);
+    APP_ERROR_CHECK(error_code);
+
+
+    // // initialize analog inputs
+    // // configure with 0 as input pin for now
+    nrf_saadc_channel_config_t channel_config = NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(0);
+    channel_config.gain = NRF_SAADC_GAIN1_6; // input gain of 1/6 Volts/Volt, multiply incoming signal by (1/6)
+    channel_config.reference = NRF_SAADC_REFERENCE_INTERNAL; // 0.6 Volt reference, input after gain can be 0 to 0.6 Volts
+    
+
+    channel_config.pin_p = BUCKLER_ANALOG_ACCEL_X;
+    error_code = nrfx_saadc_channel_init(X_CHANNEL, &channel_config);
+    APP_ERROR_CHECK(error_code);
+
+    channel_config.pin_p = BUCKLER_ANALOG_ACCEL_Y;
+    error_code = nrfx_saadc_channel_init(Y_CHANNEL, &channel_config);
+    APP_ERROR_CHECK(error_code);
+
+    channel_config.pin_p = BUCKLER_ANALOG_ACCEL_Z;
+    error_code = nrfx_saadc_channel_init(Z_CHANNEL, &channel_config);
+    APP_ERROR_CHECK(error_code);
+
+    // initialization complete
+    printf("Buckler initialized!\n");
+
+
+    ////////////////////
+
+    // calibration of the voltage output from the ADC
+
+    // .. copy your work from the accelerometer lab
+
+    // variables for sampling raw values from the ADC
+
+    // defining tilt variables
+
+
+    // Initialize the SD Card for logging data in TESTFILE.csv
+    init_SDCard();
+
+    // loop forever
+    while (1) {
+
+        nrf_saadc_value_t x_val = sample_value(X_CHANNEL);
+        nrf_saadc_value_t y_val = sample_value(Y_CHANNEL);
+        nrf_saadc_value_t z_val = sample_value(Z_CHANNEL);
+
+        float x_volt = (float)x_val * LSB;
+        float y_volt = (float)y_val * LSB;
+        float z_volt = (float)z_val * LSB;
+
+        float x_g = (x_volt - 1.45) / .382;
+        float y_g = (y_volt - 1.462) / .397;
+        float z_g = (z_volt - 1.504) / .4;
+
+
+        //-------------------------------------------------------------//	  
+        //---------- DONT MODIFY THE CODE BELOW THIS LINE -------------//
+        // display results
+        float ax, ay, az;
+
+        printf("a_x: %f\ta_y: %f\ta_z:%f\n", ax, ay, az);
+
+        // code for logging data from the accelerometer    
+        // if (!gpio_read(BUCKLER_BUTTON0)) {
+
+        timestamp = get_timestamp();      
+        simple_logger_log("%f,%f,%f,%f\n", timestamp, ax, ay, az);
+
+        printf("%f - Wrote line to SD card\n", timestamp);
+        // Signal that lines were written
+
+        // gpio_clear(BUCKLER_LED0);      
+        nrf_delay_ms(100);
+        // }
+        // else
+        // gpio_set(BUCKLER_LED0);  
+    }   
+}
+
+
