@@ -24,11 +24,12 @@
 #define X_CHANNEL 0
 #define Y_CHANNEL 1
 #define Z_CHANNEL 2
-
+//#define LSB 0.00087890625
+//#define BIAS 1.65
+//#define VOLTSPERG .462
+//
 #define LSB 0.00087890625
-#define BIAS 1.65
-#define VOLTSPERG .462
-
+#define VOLTSPERG .42
 
 // callback for SAADC events
 void saadc_callback (nrfx_saadc_evt_t const * p_event) {
@@ -99,14 +100,16 @@ int main (void) {
         float y_volt = (float)y_val * LSB;
         float z_volt = (float)z_val * LSB;
 
-        float x_g = (x_volt - BIAS) / VOLTSPERG;
-        float y_g = (y_volt - BIAS) / VOLTSPERG;
-        float z_g = (z_volt - BIAS) / VOLTSPERG;
+        float x_g = (x_volt - 1.45) / .382;
+        float y_g = (y_volt - 1.462) / .397;
+        float z_g = (z_volt - 1.504) / .4;
+
+        float vec = (x_g * x_g) + (y_g * y_g) + (z_g * z_g);
 
 
         //printf("x_val: %hd\n y_val: %hd\n z_val: %hd\n", x_val, y_val, z_val);
         //printf("x_volt: %fV\n y_volt: %fV\n z_volt: %fV\n", x_volt, y_volt, z_volt);
-        printf("x_g: %f\n y_g: %f\n z_g: %f\n", x_g, y_g, z_g);
+        printf("x_g: %f\n y_g: %f\n z_g: %f\n vec_square: %f\n", x_g, y_g, z_g, vec);
 
 
         nrf_delay_ms(250);
