@@ -10,7 +10,8 @@
 
 #include "timestamp.h"
 
-#define RAD2DEG 57.13 
+#define RAD2DEG 57.29577951308232
+#define LSB 0.00087890625
 
 // ADC channels
 #define X_CHANNEL 0
@@ -32,6 +33,16 @@ nrf_saadc_value_t sample_value (uint8_t channel) {
     nrf_saadc_value_t val;
     ret_code_t error_code = nrfx_saadc_sample_convert(channel, &val);
     APP_ERROR_CHECK(error_code);
+    return val;
+}
+
+float clamp_value(float val) {
+    if (val > 1) {
+        return 1;
+    }
+    if (val < -1) {
+        return -1;
+    }
     return val;
 }
 
@@ -101,32 +112,35 @@ int main (void) {
         float y_volt = (float)y_val * LSB;
         float z_volt = (float)z_val * LSB;
 
-        float x_g = (x_volt - 1.45) / .382;
-        float y_g = (y_volt - 1.462) / .397;
-        float z_g = (z_volt - 1.504) / .4;
+        float x_g = clamp_value((x_volt - 1.45) / .382);
+        float y_g = clamp_value((y_volt - 1.462) / .397);
+        float z_g = clamp_value((z_volt - 1.504) / .4);
 
+        float ax = RAD2DEG * acos(x_g);
+        float ay = RAD2DEG * acos(y_g);
+        float az = RAD2DEG * acos(z_g);
+        
+        //printf("x_g: %f\ty_g: %f\tz_g:%f\n", x_g, y_g, z_g);
 
         //-------------------------------------------------------------//	  
         //---------- DONT MODIFY THE CODE BELOW THIS LINE -------------//
         // display results
-        float ax, ay, az;
 
         printf("a_x: %f\ta_y: %f\ta_z:%f\n", ax, ay, az);
 
         // code for logging data from the accelerometer    
-        // if (!gpio_read(BUCKLER_BUTTON0)) {
+        if (!gpio_read(BUCKLER_BUTTON0)) {
+            timestamp = get_timestamp();      
+            simple_logger_log("%f,%f,%f,%f\n", timestamp, ax, ay, az);
 
-        timestamp = get_timestamp();      
-        simple_logger_log("%f,%f,%f,%f\n", timestamp, ax, ay, az);
+            printf("%f - Wrote line to SD card\n", timestamp);
+            // Signal that lines were written
 
-        printf("%f - Wrote line to SD card\n", timestamp);
-        // Signal that lines were written
-
-        // gpio_clear(BUCKLER_LED0);      
-        nrf_delay_ms(100);
-        // }
-        // else
-        // gpio_set(BUCKLER_LED0);  
+            gpio_clear(BUCKLER_LED0);      
+            nrf_delay_ms(100);
+        }
+        else
+            gpio_set(BUCKLER_LED0);  
     }   
 }
 
