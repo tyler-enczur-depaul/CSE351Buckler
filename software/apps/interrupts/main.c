@@ -21,6 +21,12 @@ void SWI1_EGU1_IRQHandler(void) {
     NRF_EGU1->EVENTS_TRIGGERED[0]=0;
     // rest of the code follows here
     printf("Software Interrupt Received\n");
+    printf("Software Interrupt Running");
+    for (int i = 0; i < 10; ++i) {
+        printf(".");
+        nrf_delay_ms(1000);
+        printf("\nSoftware Interrupt Done!\n");
+    }
 }
 
 // Step B: Write an IRQ Handler/ISR for the Interrupt
@@ -68,7 +74,6 @@ int main(void) {
     while (1) {
         // Main application loop
         //printf("Looping\n");
-        nrf_delay_ms(1000);
         software_interrupt_generate();
         //__WFI();
     }
