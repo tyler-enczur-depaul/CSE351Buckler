@@ -47,6 +47,7 @@ void timer_init(uint8_t duration){
     NRF_TIMER4->MODE = 0;
     NRF_TIMER4->TASKS_CLEAR = 1;
     NRF_TIMER4->TASKS_START = 1;
+    NRF_TIMER4->INTENSET = 1 << 16;
     // Additional settings for declaring TIMER4 as an interrupt 
 
 }
@@ -70,11 +71,21 @@ uint32_t read_counter(){
     return (uint32_t) NRF_TIMER3->CC[0];
 }
 
-void GPIOTE_IRQHandler(void) {
-    // Clear the Events register
-    NRF_GPIOTE->EVENTS_IN[0]=0;
+// void GPIOTE_IRQHandler(void) {
+//     // Clear the Events register
+//     NRF_GPIOTE->EVENTS_IN[0]=0;
+//     NRF_TIMER3->TASKS_COUNT = 1;
+//     printf("Button Pressed! Count: %lu\n", read_counter());
+// }
+
+void TIMER4_IRQHandler(void) {
+    uint32_t time = read_timer();
+    printf("Timer 4 readings are: %ld which is %.1f seconds\n", time, (float)time/31250);
+    printf("Counter readings are: %ld \n", read_counter());
+    NRF_TIMER4->TASKS_CLEAR = 1;
+    NRF_TIMER4->EVENTS_COMPARE[0] = 0; 
     NRF_TIMER3->TASKS_COUNT = 1;
-    printf("Button Pressed! Count: %lu\n", read_counter());
+
 }
 
 int main(void) {
@@ -89,22 +100,20 @@ int main(void) {
     // You can use the NRF GPIO library to test your timers
 
 
-    gpio_config(28, INPUT);
-    NRF_GPIOTE->CONFIG[0] = 0x121C01;
-    NRF_GPIOTE->INTENSET = 1;
-    NVIC_EnableIRQ(GPIOTE_IRQn);
-    NVIC_SetPriority(GPIOTE_IRQn, 0);
+    // gpio_config(28, INPUT);
+    // NRF_GPIOTE->CONFIG[0] = 0x121C01;
+    // NRF_GPIOTE->INTENSET = 1;
+    NVIC_EnableIRQ(TIMER4_IRQn);
+    NVIC_SetPriority(TIMER4_IRQn, 0);
 
-
-    //timer_init();  
     counter_init();
+    timer_init(3);
+
 
 
     // loop forever
     while (1) {
         __WFE();
-        // printf("Timer 4 readings are: %d \n", read_timer());
-        // printf("Seconds: %.1f\n", ((float)read_timer())/31250);
 
         // if (NRF_TIMER4->EVENTS_COMPARE[0]) {
         //     NRF_TIMER4->TASKS_CLEAR = 1;
@@ -112,9 +121,8 @@ int main(void) {
         //     NRF_TIMER3->TASKS_COUNT = 1;
         // }
         
-        //printf("Counter readings are: %d \n", read_counter());
 
-        //nrf_delay_ms(10);
+        // nrf_delay_ms(10);
     }
 }
 
