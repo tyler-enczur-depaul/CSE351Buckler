@@ -11,7 +11,7 @@
 #define PWM_TOP_VALUE   16000     // PWM period (16000 ticks @ 16 MHz)
 
 // Define duty cycle values (to be implemented)
-uint16_t pwm_seq_values[] = {};  
+uint16_t pwm_seq_values[] = {}; 
 
 // Function to initialize PWM (to be implemented)
 void pwm_init(void) {
