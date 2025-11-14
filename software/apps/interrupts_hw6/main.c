@@ -22,7 +22,7 @@ void GPIOTE_IRQHandler(void) {
 
     if (NRF_GPIOTE->EVENTS_IN[0]) {
         gpio_clear(25);
-        //nrf_delay_ms(1000);
+        nrf_delay_ms(20);
         gpio_set(25);
         printf("Button pressed\n");
         NRF_GPIOTE->EVENTS_IN[0] = 0;
@@ -30,7 +30,7 @@ void GPIOTE_IRQHandler(void) {
 
     if (NRF_GPIOTE->EVENTS_IN[1]) {
         gpio_clear(24);
-        // nrf_delay_ms(1000);
+        nrf_delay_ms(20);
         gpio_set(24);
         printf("Switch switched\n");
         NRF_GPIOTE->EVENTS_IN[1] = 0;
