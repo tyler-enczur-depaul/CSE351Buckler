@@ -7,7 +7,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <math.h>  // needed for tilt angle calculation
 
 #include "app_error.h"
 #include "nrf.h"
@@ -26,19 +25,7 @@
 #include "display.h"
 #include "lsm9ds1.h"
 
-#define RAD2DEG 57.29577951308232
-
 NRF_TWI_MNGR_DEF(twi_mngr_instance, 5, 0);
-
-float clamp_value(float val) {
-    if (val > 1) {
-        return 1;
-    }
-    if (val < -1) {
-        return -1;
-    }
-    return val;
-}
 
 int main(void) {
     ret_code_t error_code = NRF_SUCCESS;
@@ -86,24 +73,20 @@ int main(void) {
     char buf[16] = {0};
     while(1) {
         lsm9ds1_measurement_t acc_measurement = lsm9ds1_read_accelerometer();
-
-        float angle = RAD2DEG * acos(clamp_value(acc_measurement.z_axis));
-        if (angle < 45) {
-            snprintf(buf, 16, "Tilt Angle:");
-            display_write(buf, 0);
-            snprintf(buf, 16, "%.3f", angle);
-            display_write(buf, 1);
-        }
-        else {
-            snprintf(buf, 16, "!!! DANGER OF");
-            display_write(buf, 0);
-            snprintf(buf, 16, "OVERTURN !!!");
-            display_write(buf, 1);
-
-        }
-        nrf_delay_ms(500);
+        snprintf(buf, 16, "Ax: %.3f Ay:", acc_measurement.x_axis);
+        display_write(buf, 0);
+        snprintf(buf, 16, "%.3f Az: %.3f", acc_measurement.y_axis, acc_measurement.z_axis);
+        display_write(buf, 1);
+        nrf_delay_ms(1000);
 
 
+        lsm9ds1_measurement_t gyr_measurement = lsm9ds1_read_gyro_integration();
+        nrf_delay_ms(1000);
+        snprintf(buf, 16, "Gx: %.3f Gy:", gyr_measurement.x_axis);
+        display_write(buf, 0);
+        snprintf(buf, 16, "%.3f Gz: %.3f", gyr_measurement.y_axis, gyr_measurement.z_axis);
+        display_write(buf, 1);
+        nrf_delay_ms(1000);
     }
 }
 

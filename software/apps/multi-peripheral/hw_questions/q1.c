@@ -7,7 +7,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <math.h>  // needed for tilt angle calculation
 
 #include "app_error.h"
 #include "nrf.h"
@@ -18,27 +17,11 @@
 #include "nrf_log_default_backends.h"
 #include "nrf_pwr_mgmt.h"
 #include "nrf_serial.h"
-#include "nrf_twi_mngr.h"
 #include "nrfx_gpiote.h"
 #include "nrf_drv_spi.h"
 
 #include "buckler.h"
 #include "display.h"
-#include "lsm9ds1.h"
-
-#define RAD2DEG 57.29577951308232
-
-NRF_TWI_MNGR_DEF(twi_mngr_instance, 5, 0);
-
-float clamp_value(float val) {
-    if (val > 1) {
-        return 1;
-    }
-    if (val < -1) {
-        return -1;
-    }
-    return val;
-}
 
 int main(void) {
     ret_code_t error_code = NRF_SUCCESS;
@@ -48,20 +31,6 @@ int main(void) {
     APP_ERROR_CHECK(error_code);
     NRF_LOG_DEFAULT_BACKENDS_INIT();
     printf("Log initialized\n");
-
-    // initialize i2c master (two wire interface)
-    nrf_drv_twi_config_t i2c_config = NRF_DRV_TWI_DEFAULT_CONFIG;
-    i2c_config.scl = BUCKLER_SENSORS_SCL;
-    i2c_config.sda = BUCKLER_SENSORS_SDA;
-    i2c_config.frequency = NRF_TWIM_FREQ_100K;
-    error_code = nrf_twi_mngr_init(&twi_mngr_instance, &i2c_config);
-    APP_ERROR_CHECK(error_code);
-
-    // initialize LSM9DS1 driver
-    lsm9ds1_init(&twi_mngr_instance);
-    printf("lsm9ds1 initialized\n");
-
-    lsm9ds1_start_gyro_integration();
 
     // initialize spi master(controller)
     nrf_drv_spi_t spi_instance = NRF_DRV_SPI_INSTANCE(1);
@@ -81,29 +50,17 @@ int main(void) {
 
     // initialize display driver
     display_init(&spi_instance);
+    printf("Display initialized\n");
+    nrf_delay_ms(1000);
 
     // Write test numbers in a loop
-    char buf[16] = {0};
+    unsigned int i = 0;
     while(1) {
-        lsm9ds1_measurement_t acc_measurement = lsm9ds1_read_accelerometer();
-
-        float angle = RAD2DEG * acos(clamp_value(acc_measurement.z_axis));
-        if (angle < 45) {
-            snprintf(buf, 16, "Tilt Angle:");
-            display_write(buf, 0);
-            snprintf(buf, 16, "%.3f", angle);
-            display_write(buf, 1);
-        }
-        else {
-            snprintf(buf, 16, "!!! DANGER OF");
-            display_write(buf, 0);
-            snprintf(buf, 16, "OVERTURN !!!");
-            display_write(buf, 1);
-
-        }
-        nrf_delay_ms(500);
-
-
+        char buf[16] = {0};
+        snprintf(buf, 16, "%u", i);
+        display_write(buf, i % 2);
+        i += 7;
+        nrf_delay_ms(10);
     }
 }
 
