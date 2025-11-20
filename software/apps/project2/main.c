@@ -57,42 +57,43 @@ uint16_t lastCount = 0;           // Stores the frequency count
  * 5. Start the timer
  * 
  */
-void timer_init(uint8_t duration) {
-    // TODO: Calculate prescaler and timer frequency
-    const uint32_t prescaler = 0; // 0-9
-    
-    // TODO: Calculate timer frequency
+void timer_init(uint8_t duration) { 
     // fTimer = 16MHz / 2^prescaler
-    uint32_t fTimer = 0; // FILL THIS IN
+    uint32_t fTimer = 31250;
     
-    // TODO: Calculate number of ticks for desired duration
-    // N = duration * fTimer
-    uint32_t N = 0; // FILL THIS IN
+    // Calculate number of ticks for desired duration
+    uint32_t N = duration * fTimer;
     
-    // TODO: Enable COMPARE[0] interrupt
-    // Hint: Set bit 16 in INTENSET register
-    NRF_TIMER4->INTENSET = 0; // FILL THIS IN
+    // Enable COMPARE[0] interrupt
+    NRF_TIMER4->INTENSET = 1 << 16;
     
-    // TODO: Enable TIMER4 interrupt in NVIC
-    // FILL THIS IN
+
+    NRF_TIMER4->PRESCALER = 9;
     
-    // TODO: Set NVIC priority for TIMER4
-    // FILL THIS IN
+    if (N < 65536) {
+        NRF_TIMER4->BITMODE = 0;
+    }
+    else if (N < 16777216) {
+        NRF_TIMER4->BITMODE = 2;
+    }
+    else {
+        NRF_TIMER4->BITMODE = 3;
+    }
     
-    // TODO: Configure TIMER4 prescaler
-    NRF_TIMER4->PRESCALER = 0; // FILL THIS IN
+    NRF_TIMER4->MODE = 0;
     
-    // TODO: Set bit mode (24-bit = 2)
-    NRF_TIMER4->BITMODE = 0; // FILL THIS IN
-    
-    // TODO: Set timer mode (Timer = 0)
-    NRF_TIMER4->MODE = 0; // FILL THIS IN
-    
-    // TODO: Set compare value
-    NRF_TIMER4->CC[0] = 0; // FILL THIS IN
-    
-    // TODO: Start the timer
-    // FILL THIS IN
+    // Set compare value
+    NRF_TIMER4->CC[0] = N;
+
+    // Enable TIMER4 interrupt in NVIC
+    NVIC_EnableIRQ(TIMER4_IRQn);
+
+    // Set NVIC priority for TIMER4
+    NVIC_SetPriority(TIMER4_IRQn, 0);
+
+    // Start timer
+    NRF_TIMER4->TASKS_CLEAR = 1;
+    NRF_TIMER4->TASKS_START = 1;
 }
 
 /**
@@ -119,17 +120,18 @@ void reset_timer() {
  * Hint: Counter mode increments when TASKS_COUNT is triggered
  */
 void counter_init() {
-    // TODO: Set bit mode (24-bit = 2)
-    NRF_TIMER3->BITMODE = 0; // FILL THIS IN
+    // Set bit mode (24-bit = 2)
+    NRF_TIMER3->BITMODE = 2;
     
-    // TODO: Set counter mode (Counter = 1)
-    NRF_TIMER3->MODE = 0; // FILL THIS IN
+    // Set counter mode (Counter = 1)
+    NRF_TIMER3->MODE = 1;
     
-    // TODO: Clear the counter
-    // FILL THIS IN
-    
-    // TODO: Start the counter
-    // FILL THIS IN
+    // Clear the counter
+    NRF_TIMER3->TASKS_CLEAR = 1;
+
+    // Start counter
+    NRF_TIMER3->TASKS_START = 1;
+
 }
 
 /**
@@ -147,15 +149,15 @@ uint32_t read_counter() {
  * (This function is provided - no need to modify)
  */
 void init_pwm(uint16_t pwm, uint32_t prescalar, uint32_t counterTop) {
-    uint16_t pwm_seq[4] = ;
+    uint16_t pwm_seq[4] = {pwm, 0, 0, 0};
 
-    NRF_PWM0->PSEL.OUT[0] = ;
+    NRF_PWM0->PSEL.OUT[0] = 11;
 
-    NRF_PWM0->ENABLE = ;
-    NRF_PWM0->MODE = ;
-    NRF_PWM0->PRESCALER = ;
-    NRF_PWM0->COUNTERTOP = ;
-    NRF_PWM0->LOOP = ;
+    NRF_PWM0->ENABLE = 1;
+    NRF_PWM0->MODE = 0;
+    NRF_PWM0->PRESCALER = prescalar;
+    NRF_PWM0->COUNTERTOP = counterTop;
+    NRF_PWM0->LOOP = 0b111111111111111;
     NRF_PWM0->DECODER = (PWM_DECODER_LOAD_Individual << PWM_DECODER_LOAD_Pos) | 
                         (PWM_DECODER_MODE_RefreshCount << PWM_DECODER_MODE_Pos);
 
@@ -187,38 +189,21 @@ void init_pwm(uint16_t pwm, uint32_t prescalar, uint32_t counterTop) {
  * - Trigger TIMER3 to count (TASKS_COUNT)
  */
 void GPIOTE_IRQHandler(void) {
-    
-    // TODO: Check if EVENTS_IN[0] occurred (button press)
-    if (0) { // FILL THIS IN - Check NRF_GPIOTE->EVENTS_IN[0]
+    if (NRF_GPIOTE->EVENTS_IN[0]) {
+
+        NRF_GPIOTE->EVENTS_IN[0] = 0;
         
-        // TODO: Clear EVENTS_IN[0] flag
-        // FILL THIS IN
-        
-        // TODO: Check switch position (pin 22) to determine direction
-        if (0) { // FILL THIS IN - Use gpio_read(22) == 0
-            // TODO: Increase counterTop
-            // FILL THIS IN
-            
-            // TODO: Reinitialize PWM with new parameters
-            // FILL THIS IN
+        if (gpio_read(22) == 0) {
+            counterTop += 1000;
         } else {
-            // TODO: Decrease counterTop
-            // FILL THIS IN
-            
-            // TODO: Reinitialize PWM with new parameters
-            // FILL THIS IN
+            counterTop -= 1000;
         }
+        init_pwm(pwm, prescalar, counterTop);
     }
     
-    // TODO: Check if EVENTS_IN[1] occurred (PWM pulse detected)
-    if (0) { // FILL THIS IN - Check NRF_GPIOTE->EVENTS_IN[1]
-        
-        // TODO: Clear EVENTS_IN[1] flag
-        // FILL THIS IN
-        
-        // TODO: Increment TIMER3 counter
-        // Hint: Trigger TASKS_COUNT
-        // FILL THIS IN
+    if (NRF_GPIOTE->EVENTS_IN[1]) { 
+        NRF_GPIOTE->EVENTS_IN[1] = 0;
+        NRF_TIMER3->TASKS_COUNT = 1;
     }
 }
 
@@ -234,19 +219,11 @@ void GPIOTE_IRQHandler(void) {
  * 3. Reinitialize the counter (clear it)
  * 4. Reset the timer for next measurement period
  */
-void TIMER4_IRQHandler(void) {
-    
-    // TODO: Clear EVENTS_COMPARE[0]
-    // FILL THIS IN
-    
-    // TODO: Read counter and store in lastCount
-    lastCount = 0; // FILL THIS IN - Use read_counter()
-    
-    // TODO: Reinitialize counter (clear for next measurement)
-    // FILL THIS IN
-    
-    // TODO: Reset timer
-    // FILL THIS IN
+void TIMER4_IRQHandler(void) { 
+    NRF_TIMER4->EVENTS_COMPARE[0] = 0;
+    lastCount = read_counter(); 
+    counter_init();
+    reset_timer();
 }
 
 int main(void) {
@@ -288,21 +265,20 @@ int main(void) {
      * - Polarity: Lo to Hi (1)
      */
     
-    // TODO: Configure GPIOTE CONFIG[0] for button 0
-    
+    // Configure GPIOTE CONFIG[0] for button 0 
+    NRF_GPIOTE->CONFIG[0] = 0x121C01;
         
-    // TODO: Enable interrupt for GPIOTE channel 0    
+    // Configure GPIOTE CONFIG[1] for PWM input (pin 13)
+    NRF_GPIOTE->CONFIG[1] = 0x10d01;
     
-    // TODO: Configure GPIOTE CONFIG[1] for PWM input (pin 13)
+    // enable interrupt for both channels
+    NRF_GPIOTE->INTENSET = 0b11;
     
+    // Enable GPIOTE interrupt in NVIC 
+    NVIC_EnableIRQ(GPIOTE_IRQn);
     
-    // TODO: Enable interrupt for GPIOTE channel 1    
-    
-    // TODO: Enable GPIOTE interrupt in NVIC
-    // FILL THIS IN
-    
-    // TODO: Set NVIC priority for GPIOTE
-    // FILL THIS IN
+    // Set NVIC priority for GPIOTE
+    NVIC_SetPriority(GPIOTE_IRQn, 0);
     
     // Measurement duration (1 second)
     uint8_t duration = 1;
@@ -312,21 +288,27 @@ int main(void) {
     timer_init(duration);
     counter_init();
     
-    // Configure pin 22 as input (for switch)    
-    
+    // Configure pin 22 as input (for switch)
+    gpio_config(22, INPUT);
+
+
+    // initialize display driver
+    display_init(&spi_instance);
+
     // Main loop
     while (1) {
         char buf[2][16];
         
         // TODO 6: Display frequency on LCD
         // Uncomment these lines after display is configured
-        // snprintf(buf[0], sizeof(buf[0]), "targ: %.2f Hz", (float)((float)pwm / (float)counterTop) * 1000);
-        // snprintf(buf[1], sizeof(buf[1]), "real: %d.00 Hz", lastCount);
-        // display_write(buf[0], 0);
-        // display_write(buf[1], 1);
+        snprintf(buf[0], sizeof(buf[0]), "targ: %.2f Hz",  (16000000.0f / counterTop));
+        snprintf(buf[1], sizeof(buf[1]), "real: %d.00 Hz", lastCount);
+        display_write(buf[0], 0);
+        display_write(buf[1], 1);
         
         // Print frequency measurements
-        printf("Target: %.2f Hz \n", (float)((float)pwm/(float)counterTop) * 1000);
+        // NOTE: Calculation was wrong
+        printf("Target: %.2f Hz \n", (16000000.0f / counterTop));
         printf("Measured: %d.00 Hz \n", lastCount);
         
         __WFI(); // Wait for interrupt
